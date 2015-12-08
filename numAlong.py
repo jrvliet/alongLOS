@@ -13,13 +13,35 @@ galID_list = ['D9o2', 'D9q', 'D9m4a']
 baseLoc = '/home/matrix3/jrvander/sebass_gals/dwarfs/'
 
 for galID, expn in zip(galID_list, expn_list):
-
+    print ''
+    print galID
     for a in expn:
+        print a
+        loc = '{0:s}/{1:s}_outputs/a{2:s}/cellIDs/'.format(baseLoc, galID, a)
+       
+        outfilename = '{0:s}_{1:s}_numCellsAlongLOS.dat'.format(galID, a) 
+        fout = open(loc+outfilename, 'w')
+        fout.write('#LOS \t Num Cells Along\n')
 
-        loc = '{0:s}_outputs/a{1:s}/cellIDs/'.format(galID, a)
-        
         for i in range(1,1000):
-            filename = 'los{0:4d}.cellID.dat'.format(i)
-            print filename
-            sys.exit()
-        
+            filename = 'los{0:04d}.cellID.dat'.format(i)
+            cellcount = 0
+            f = open(loc+filename)
+            f.readline()
+            for line in f:
+                cellcount += 1
+            f.close()
+
+            fout.write('{0:d}\t{1:d}\n'.format(i, cellcount))
+        fout.close()
+
+
+
+
+
+
+
+
+
+
+
