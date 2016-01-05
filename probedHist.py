@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 ion_list = ['HI', 'MgII', 'CIV', 'OVI']
 gal_list = ['D9o2', 'D9q', 'D9m4a']
 lab_list = ['dwSN', 'dwALL_1', 'dwALL_8']
+sty_list = ['solid', 'dashed', 'dashdot']
+sty_list = ['solid', 'solid', 'solid']
 
 abscellLoc = '/home/matrix3/jrvander/sebass_gals/dwarfs/abcells'
 abscellLoc = '/home/jacob/research/dwarfs/abscells/'
@@ -32,7 +34,7 @@ for ion in ion_list:
     axa = axesa[ion_list.index(ion)]    
     axb = axesb[ion_list.index(ion)]    
 
-    for galID, lab in zip(gal_list, lab_list):
+    for galID, lab, style in zip(gal_list, lab_list, sty_list):
 
         counts = np.zeros(numLOS)
         norms = np.zeros(numLOS)
@@ -82,16 +84,19 @@ for ion in ion_list:
             counts[i] = counts[i]/filecount
             norms[i] = norms[i]/filecount
         axa.hist(counts, bins=numbins, log=True, histtype='step', label=lab)
-        axb.hist(norms, bins=numbins, log=True, histtype='step', label=lab)
+        axb.hist(norms, bins=numbins, log=True, histtype='step', label=lab, 
+                    linestyle=style)
 
     axa.set_xlabel('Number of Absorbing Cells along LOS')
     axa.set_ylabel('Frequency')
     axa.set_title(ion)
     axa.legend(frameon=False, loc='upper right')
 
-    axb.set_xlabel('# Absorbing Cells along LOS / # Cells along LOS')
+    axb.set_xlabel('Fraction of Cells that Cause {0:s} Absorption'.format(ion))
     axb.set_ylabel('Frequency')
-    axb.set_title(ion)
+#    axb.set_title(ion) 
+    axb.set_ylim([0.1, 1000.0])
+    axb.set_xlim([0.0, 1.0])
     if ion=='HI':
         axb.legend(frameon=False, loc='upper left')
     else:
@@ -103,7 +108,7 @@ s = 'numSigCellsAlongLOS.png'
 figa.savefig(s)
 
 figb.tight_layout()
-s = 'numSigCellsAlongLOS_normed.png'
+s = 'numSigCellsAlongLOS_normed.pdf'
 figb.savefig(s)
 
 
